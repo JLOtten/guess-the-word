@@ -16,7 +16,7 @@ const message = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again");
 
 //starting test word
-const word = magnolia;
+const word = "magnolia";
 
 //create and name a functionto update the paragraph's innerText for worde-in-progress
 const updateWords = function (word) {
@@ -33,8 +33,47 @@ updateWords(word);
 //add an event listener for when the player clicks the guess button
 guessLetterButton.addEventListener("click", function (e) {
     e.preventDefault(); //b/c you're working with a form, you want to prevent the default behavior of clicking a button ->the form submitting -> and reloading the page
+    //empty the message paragraph
+    message.innerText = "";
+    //grab what was entererd in the input
     const guess = letterInput.value;
-    console.log(guess);
-    letterInput.value="";
+    //make sure guess was a single value
+    const goodGuess = checkInput(guess);
+
+    if (goodGuess) {
+        makeGuess(guess);
+    }
+    letterInput.value = "";
 });
 
+//create a name and function that accepts the input value as a parameter. 
+//this functions purpose is to validate the player's input
+const checkInput = function (input) {
+    //create a variable with a regular expressioin for the accepted letter sequence
+    const acceptedLetter = /[a-zA-Z]/;
+
+    //use a conditional block to check for different scenarios
+    if (input.length === 0) {
+        //is the input empty?
+    message.innerText = "Please enter a letter.";
+    } else if (input.length > 1) {
+        //was more than one number typed in?
+    message.innerText = "Please enter a single letter.";
+    } else if (!input.match(acceptedLetter)) {
+        //did you type something that's not a letter?
+    message.innerText = "Please enter a letter from A to Z.";
+    } else {
+    //one single letter was entered
+    return input;
+    }
+};
+
+const makeGuess = function (guess) {
+    guess = guess.toUpperCase();
+    if (guessedLetters. includes(guess)) {
+        message.innerText = "That letter was already guessed. Please try a different letter.";
+    } else {
+        guessedLetters.push(guess);
+        console.log(guessedLetters);
+    }
+};
