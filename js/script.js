@@ -17,7 +17,7 @@ const playAgainButton = document.querySelector(".play-again");
 
 //starting test word
 let word = "magnolia"; //changed from const to let so this could be reassigned later
-const guessedLetters = [];
+let guessedLetters = [];
 let remainingGuesses = 8;
 
 //add an async function 
@@ -145,7 +145,8 @@ const updateGuessesRemaining = function (guess) {
 
     if (remainingGuesses === 0) { //if there are no guesses left, display this message:
         message.innerHTML = `Game over! The word was <span class ="highlight">${word}</span>.`;
-        remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
+        startOver();
+        //remainingGuessesSpan.innerText = `${remainingGuesses} guesses`;
     } else if (remainingGuesses === 1) { //if there is one remaining guess, update the span inside the paragraph:
         remainingGuessesSpan.innerText = `${remainingGuesses} guess`;
     } else { //if they have more than one guess left, update the span element to let them know how many guesses are remaining
@@ -159,5 +160,33 @@ const checkIfWin = function () {
     if (word.toUpperCase() === wordInProgress.innerText) { //if the player has won, add t
         message.classList.add("win"); //add the win class to teh empty paragraph where messages appear when they guess the letter
         message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`; //update the paragraph's contents
+        startOver();
+
     }
 };
+
+//create a function to hide the guess button, the paragraph where remaining guesses display and the ul where the guessed letters appear
+const startOver = function () {
+    guessLetterButton.classList.add("hide"); //hides guess button
+    remainingGuessesElement.classList.add("hide"); //hides paragraph where remaining guesses display
+    guessedLettersElement.classList.add("hide"); //hides the ul where guessed letters appear
+    playAgainButton.classList.remove("hide"); //show play again button
+};
+
+playAgainButton.addEventListener("click", function () {
+    //reset all original vaues - grab new word
+    message.classList.remove("win");
+    guessedLetters = []; //set this global variable to an empty array
+    remainingGuesses = 8;
+    remainingGuessesSpan.innerText = `${remainingGuesses} guesses`; //populate the text of the span inside the paragraph where remaining guesses display w/ new amt of guesses
+    guessedLettersElement.innerHTML = "";
+    message.innerText = "";
+    //grab a new word
+    getword();
+
+    guessLetterButton.classList.remove("hide");  //show guess button
+    //(hide the play again button)
+    playAgainButton.classList.add("hide");
+    remainingGuessesElement.classList.remove("hide"); //show paragraph with remaining guesses
+    guessedLettersElement.classList.remove("hide"); //show guessed letters once more
+});
